@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
@@ -31,7 +31,7 @@ interface CheckItem {
   status: "pending" | "checking" | "passed" | "failed";
 }
 
-export default function PreCheckPage() {
+function PreCheckContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "XXX-XXX";
@@ -269,5 +269,19 @@ export default function PreCheckPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function PreCheckPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
+      <PreCheckContent />
+    </Suspense>
   );
 }
